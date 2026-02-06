@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelForge Nexus | Secure Creative Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="dark-theme">
+    <div id="app">
+        <!-- Auth Section -->
+        <section id="auth-section" class="page hidden">
+            <div class="glass-card auth-card">
+                <div class="brand">
+                    <i data-lucide="shield-check" class="logo-icon"></i>
+                    <h1>PixelForge <span>Nexus</span></h1>
+                </div>
+                <form id="login-form">
+                    <h2>Welcome Back</h2>
+                    <p class="subtitle">Secure login for creative team members</p>
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" id="login-username" required placeholder="Enter username">
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" required placeholder="Enter password">
+                    </div>
+                    <div id="mfa-field" class="input-group hidden">
+                        <label>MFA Token</label>
+                        <input type="text" id="login-token" placeholder="6-digit code">
+                    </div>
+                    <button type="submit" class="btn-primary">Sign In <i data-lucide="arrow-right"></i></button>
+                    <div id="login-error" class="error-msg"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Main Layout (Dashboard) -->
+        <section id="dev-layout" class="page hidden">
+            <nav class="sidebar">
+                <div class="brand">
+                    <i data-lucide="shield-check"></i>
+                    <span>Nexus</span>
+                </div>
+                <ul class="nav-links">
+                    <li data-page="dashboard" class="active"><i data-lucide="layout-dashboard"></i> Dashboard</li>
+                    <li data-page="projects"><i data-lucide="folder-kanban"></i> Projects</li>
+                    <li id="admin-link" class="hidden" data-page="admin"><i data-lucide="users"></i> Team Management
+                    </li>
+                    <li data-page="settings"><i data-lucide="settings"></i> Settings</li>
+                </ul>
+                <div class="user-info">
+                    <div class="user-avatar" id="nav-user-avatar">?</div>
+                    <div class="user-details">
+                        <span id="nav-username">Username</span>
+                        <small id="nav-role">Role</small>
+                    </div>
+                    <button id="logout-btn" title="Logout"><i data-lucide="log-out"></i></button>
+                </div>
+            </nav>
+
+            <main class="content">
+                <header class="top-bar">
+                    <h2 id="page-title">Dashboard</h2>
+                    <div class="header-actions">
+                        <button id="add-project-btn" class="btn-primary hidden"><i data-lucide="plus"></i> New
+                            Project</button>
+                    </div>
+                </header>
+
+                <div id="dashboard-content" class="tab-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i data-lucide="briefcase"></i>
+                            <div>
+                                <h3 id="stat-active-projects">0</h3>
+                                <p>Active Projects</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="check-circle-2"></i>
+                            <div>
+                                <h3 id="stat-completed-projects">0</h3>
+                                <p>Completed</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="users"></i>
+                            <div>
+                                <h3 id="stat-team-size">0</h3>
+                                <p>Team Members</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-projects">
+                        <div class="section-header">
+                            <h3>Assigned Projects</h3>
+                        </div>
+                        <div id="project-list" class="project-grid">
+                            <!-- Project Cards Go Here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="projects-content" class="tab-content hidden">
+                    <div class="project-list-header">
+                        <input type="text" placeholder="Search projects..." class="search-input">
+                    </div>
+                    <div id="full-project-list" class="project-grid"></div>
+                </div>
+
+                <div id="admin-content" class="tab-content hidden">
+                    <div class="admin-grid">
+                        <div class="admin-card glass-card">
+                            <h3>Create New User</h3>
+                            <form id="create-user-form">
+                                <div class="input-group">
+                                    <label>Username</label>
+                                    <input type="text" id="reg-username" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Password</label>
+                                    <input type="password" id="reg-password" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Role</label>
+                                    <select id="reg-role">
+                                        <option value="Developer">Developer</option>
+                                        <option value="Project Lead">Project Lead</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-primary">Register Member</button>
+                            </form>
+                        </div>
+                        <div class="admin-card glass-card">
+                            <h3>Team Members</h3>
+                            <div id="team-list" class="member-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="settings-content" class="tab-content hidden">
+                    <div class="settings-grid">
+                        <div class="settings-card glass-card">
+                            <h3>Security</h3>
+                            <form id="change-password-form">
+                                <label>Current Password</label>
+                                <input type="password" id="curr-pass" required>
+                                <label>New Password</label>
+                                <input type="password" id="new-pass" required>
+                                <button type="submit" class="btn-primary">Update Password</button>
+                            </form>
+                        </div>
+                        <div class="settings-card glass-card">
+                            <h3>Multi-Factor Authentication</h3>
+                            <p>Add an extra layer of security to your account.</p>
+                            <div id="mfa-status" class="mfa-status">
+                                <span class="badge">Disabled</span>
+                                <button id="setup-mfa-btn" class="btn-secondary">Setup MFA</button>
+                            </div>
+                            <div id="mfa-setup-area" class="hidden">
+                                <p>Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)</p>
+                                <img id="mfa-qr" src="" alt="QR Code">
+                                <div class="input-group">
+                                    <label>Enter 6-digit code to verify</label>
+                                    <input type="text" id="mfa-verify-token">
+                                    <button id="verify-mfa-btn" class="btn-primary">Verify & Enable</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="project-details-content" class="tab-content hidden">
+                    <button class="back-btn" onclick="Nexus.showTab('dashboard')"><i data-lucide="chevron-left"></i>
+                        Back</button>
+                    <div id="project-details-view">
+                        <!-- Details loaded here -->
+                    </div>
+                </div>
+            </main>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal glass-card">
+            <header>
+                <h3 id="modal-title">New Project</h3>
+                <button class="close-modal"><i data-lucide="x"></i></button>
+            </header>
+            <div id="modal-body">
+                <!-- Dynamic form here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
